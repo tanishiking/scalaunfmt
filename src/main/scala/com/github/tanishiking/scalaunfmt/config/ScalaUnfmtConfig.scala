@@ -87,14 +87,14 @@ case class ScalaUnfmtConfig(
 }
 
 object ScalaUnfmtConfig {
-  def configReader: ConfDecoder[ScalaUnfmtConfig] = ConfDecoder.instance[ScalaUnfmtConfig] {
+  private[this] def configReader: ConfDecoder[ScalaUnfmtConfig] = ConfDecoder.instance[ScalaUnfmtConfig] {
     case conf @ Conf.Obj(_) => default.reader.read(conf)
   }
 
-  private implicit val surface: Surface[ScalaUnfmtConfig] = generic.deriveSurface[ScalaUnfmtConfig]
+  implicit val surface: Surface[ScalaUnfmtConfig] = generic.deriveSurface[ScalaUnfmtConfig]
 
   val default = ScalaUnfmtConfig(
-    align = List(Align.default),
+    align = List(Align()),
     maxColumn = List(ScalafmtConfig.default.maxColumn),
     docstrings = List(ScalafmtConfig.default.docstrings),
     optIn = OptInChoice.default,
@@ -125,9 +125,9 @@ object ScalaUnfmtConfig {
     file: java.io.File,
     workingDirectory: AbsoluteFile
   ): Configured[ScalaUnfmtConfig] = {
-    if (!file.exists()) Configured.notOk(ConfError.fileDoesNotExist(file))
+    val absFile = AbsoluteFile.fromFile(file, workingDirectory)
+    if (!absFile.jfile.exists()) Configured.notOk(ConfError.fileDoesNotExist(file))
     else {
-      val absFile = AbsoluteFile.fromFile(file, workingDirectory)
       val content = FileOps.readFile(absFile)
       ScalaUnfmtConfig.fromHoconString(content)
     }
