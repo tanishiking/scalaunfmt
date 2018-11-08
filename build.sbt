@@ -34,5 +34,35 @@ lazy val scalaunfmt = (project in file(".")).
       "-feature",
       "-opt:l:inline",
       "-opt-inline-from"
-    )
+    ),
+
+    // Publishing
+    publishMavenStyle := true,
+    publishTo := Some(
+      if (isSnapshot.value)
+        Opts.resolver.sonatypeSnapshots
+      else
+        Opts.resolver.sonatypeStaging
+    ),
+    publishArtifact in Test := false,
+    pomIncludeRepository := { _ => false },
+    pomExtra := <url>https://github.com/tanishiking/scalaunfmt</url>
+      <licenses>
+        <license>
+          <name>MIT License</name>
+          <url>http://www.opensource.org/licenses/mit-license.php</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
+      <scm>
+        <url>git@github.com:tarao/nonempty-scala.git</url>
+        <connection>scm:git:git@github.com:tanishiking/scalaunfmt.git</connection>
+      </scm>
+      <developers>
+        <developer>
+          <id>tanishiking</id>
+          <name>Rikito Taniguchi</name>
+          <url>https://github.com/tanishiking</url>
+        </developer>
+      </developers>
   )
