@@ -55,7 +55,7 @@ lazy val scalaunfmt = (project in file(".")).
         </license>
       </licenses>
       <scm>
-        <url>git@github.com:tarao/nonempty-scala.git</url>
+        <url>git@github.com:tanishiking/scalaunfmt.git</url>
         <connection>scm:git:git@github.com:tanishiking/scalaunfmt.git</connection>
       </scm>
       <developers>
