@@ -38,6 +38,7 @@ object Cli {
     val minCode = codeAndDistance.minBy(_._2)._1
     val result = codeToConf(minCode)
 
+    println("---")
     println(Printer.printHocon(result))
     0
   }
