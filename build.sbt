@@ -1,30 +1,25 @@
-val scalafmtV = "1.6.0-RC4"
+val scalafmtV = "2.0.0-RC5"
 val metaconfigV = "0.8.3"
 val scalatestV = "3.0.5"
 val scoptV = "3.7.0"
 val similarityV = "1.0.1"
-val progressBarV = "0.7.2"
 
 lazy val scalaunfmt = (project in file(".")).
   settings(
     name := "scalaunfmt",
     organization := "com.github.tanishiking",
-    version := "0.0.1",
+    version := "0.0.2",
     scalaVersion := "2.12.7",
 
     libraryDependencies ++= Seq(
-      "com.geirsson" %% "scalafmt-core" % scalafmtV,
-      "com.geirsson" %% "scalafmt-cli" % scalafmtV,
+      "org.scalameta" %% "scalafmt-dynamic" % scalafmtV,
       "com.geirsson" %% "metaconfig-core" % metaconfigV,
       "com.geirsson" %% "metaconfig-typesafe-config" % metaconfigV,
       "com.github.scopt" %% "scopt" % scoptV,
       "org.scalatest" %% "scalatest" % scalatestV % "test",
-      "me.tongfei" % "progressbar" % progressBarV,
       "info.debatty" % "java-string-similarity" % similarityV,
-      // scala-reflect is an undeclared dependency of fansi,
-      // see https://github.com/scalameta/scalafmt/issues/1252
-      // Scalafmt(and scalaunfmt) itself does not require scala-reflect.
-      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+      // undeclared transitive dependency of coursier-small
+      "org.scala-lang.modules" %% "scala-xml" % "1.1.1"
     ),
 
     // Compilation
