@@ -17,10 +17,9 @@ class RunnerSpec extends FunSpec with Matchers {
           """.stripMargin
         val unfmtConf = Conf.parseString(unfmtConfStr).get
 
-        val baos = new ByteArrayOutputStream()
+        val baos   = new ByteArrayOutputStream()
         val stream = new PrintStream(baos)
         val runner = new Runner(stream)
-
 
         val testScalaCode1 =
           """
@@ -42,7 +41,8 @@ class RunnerSpec extends FunSpec with Matchers {
         Files.write(file1, testScalaCode1.getBytes)
         Files.write(file2, testScalaCode2.getBytes)
 
-        val optimized = runner.run(Seq(file1.toFile, file2.toFile), "2.0.0-RC5", unfmtConf).right.get
+        val optimized =
+          runner.run(Seq(file1.toFile, file2.toFile), "2.0.0-RC5", unfmtConf).right.get
         val align = Conf.parseString(optimized).get.get[String]("align").get
         align shouldBe "more"
       }
@@ -54,16 +54,20 @@ class RunnerSpec extends FunSpec with Matchers {
         import Runner.ConfOps
 
         val configs = Seq(
-          Conf.fromMap(Map(
-            "version" -> Conf.fromString("2.0.0-RC5"),
-          )),
-          Conf.fromMap(Map(
-            "version" -> Conf.fromString("2.0.0-RC5"),
-            "invalidKey" -> Conf.fromString("invalidValue")
-          )),
+          Conf.fromMap(
+            Map(
+              "version" -> Conf.fromString("2.0.0-RC5")
+            )
+          ),
+          Conf.fromMap(
+            Map(
+              "version"    -> Conf.fromString("2.0.0-RC5"),
+              "invalidKey" -> Conf.fromString("invalidValue")
+            )
+          )
         )
 
-        val baos = new ByteArrayOutputStream()
+        val baos   = new ByteArrayOutputStream()
         val stream = new PrintStream(baos)
         val runner = new Runner(stream)
 
@@ -77,20 +81,26 @@ class RunnerSpec extends FunSpec with Matchers {
         import Runner.ConfOps
 
         val configs = Seq(
-          Conf.fromMap(Map(
-            "version" -> Conf.fromString("2.0.0-RC5"),
-          )),
-          Conf.fromMap(Map(
-            "version" -> Conf.fromString("2.0.0-RC5"),
-            "align" -> Conf.fromString("more"),
-          )),
-          Conf.fromMap(Map(
-            "version" -> Conf.fromString("2.0.0-RC5"),
-            "align" -> Conf.fromString("more"),
-          )),
+          Conf.fromMap(
+            Map(
+              "version" -> Conf.fromString("2.0.0-RC5")
+            )
+          ),
+          Conf.fromMap(
+            Map(
+              "version" -> Conf.fromString("2.0.0-RC5"),
+              "align"   -> Conf.fromString("more")
+            )
+          ),
+          Conf.fromMap(
+            Map(
+              "version" -> Conf.fromString("2.0.0-RC5"),
+              "align"   -> Conf.fromString("more")
+            )
+          )
         )
 
-        val baos = new ByteArrayOutputStream()
+        val baos   = new ByteArrayOutputStream()
         val stream = new PrintStream(baos)
         val runner = new Runner(stream)
 
@@ -111,14 +121,16 @@ class RunnerSpec extends FunSpec with Matchers {
           Map(
             "a" -> Conf.fromString("xxx"),
             "b" -> Conf.fromString("yyy"),
-            "c" -> Conf.fromList(List(
-              Conf.fromString("a"),
-              Conf.fromString("b"),
-              Conf.fromString("c"),
-            ))
+            "c" -> Conf.fromList(
+              List(
+                Conf.fromString("a"),
+                Conf.fromString("b"),
+                Conf.fromString("c")
+              )
+            )
           )
         )
-        val file = conf.writeToTempFile("test", "conf")
+        val file   = conf.writeToTempFile("test", "conf")
         val parsed = Conf.parseFile(file).get
         parsed shouldBe conf
       }
@@ -135,172 +147,238 @@ class RunnerSpec extends FunSpec with Matchers {
       }
 
       it("should return error for config that contains non-list value") {
-        val c = Conf.fromMap(Map(
-          "a" -> Conf.fromList(List(
-            Conf.fromInt(1),
-            Conf.fromInt(2),
-          )),
-          "b" -> Conf.fromList(List(
-            Conf.fromString("xxx"),
-            Conf.fromString("yyy")
-          )),
-          "c" -> Conf.fromString("non-list")
-        ))
+        val c = Conf.fromMap(
+          Map(
+            "a" -> Conf.fromList(
+              List(
+                Conf.fromInt(1),
+                Conf.fromInt(2)
+              )
+            ),
+            "b" -> Conf.fromList(
+              List(
+                Conf.fromString("xxx"),
+                Conf.fromString("yyy")
+              )
+            ),
+            "c" -> Conf.fromString("non-list")
+          )
+        )
         c.combination("2.0.0").isLeft shouldBe true
       }
 
       it("should return error if conf contains empty list") {
-        val c = Conf.fromMap(Map(
-          "a" -> Conf.fromList(List(
-            Conf.fromInt(1),
-            Conf.fromInt(2),
-          )),
-          "b" -> Conf.fromList(List()),
-        ))
+        val c = Conf.fromMap(
+          Map(
+            "a" -> Conf.fromList(
+              List(
+                Conf.fromInt(1),
+                Conf.fromInt(2)
+              )
+            ),
+            "b" -> Conf.fromList(List())
+          )
+        )
         c.combination("2.0.0").isLeft shouldBe true
       }
 
       it("should return all the combinations of configurations") {
-        val conf = Conf.fromMap(Map(
-          "a" -> Conf.fromList(List(
-            Conf.fromString("a1"),
-            Conf.fromString("a2"),
-          )),
-          "b" -> Conf.fromList(List(
-            Conf.fromString("b1"),
-            Conf.fromString("b2"),
-            Conf.fromString("b3"),
-          )),
-          "c" -> Conf.fromList(List(
-            Conf.fromString("c1"),
-          )),
-        ))
+        val conf = Conf.fromMap(
+          Map(
+            "a" -> Conf.fromList(
+              List(
+                Conf.fromString("a1"),
+                Conf.fromString("a2")
+              )
+            ),
+            "b" -> Conf.fromList(
+              List(
+                Conf.fromString("b1"),
+                Conf.fromString("b2"),
+                Conf.fromString("b3")
+              )
+            ),
+            "c" -> Conf.fromList(
+              List(
+                Conf.fromString("c1")
+              )
+            )
+          )
+        )
         conf.combination("2.0.0").right.get should contain theSameElementsAs
           Seq(
-            Conf.fromMap(Map(
-              "version" -> Conf.fromString("2.0.0"),
-              "a" -> Conf.fromString("a1"),
-              "b" -> Conf.fromString("b1"),
-              "c" -> Conf.fromString("c1"),
-            )),
-            Conf.fromMap(Map(
-              "version" -> Conf.fromString("2.0.0"),
-              "a" -> Conf.fromString("a1"),
-              "b" -> Conf.fromString("b2"),
-              "c" -> Conf.fromString("c1"),
-            )),
-            Conf.fromMap(Map(
-              "version" -> Conf.fromString("2.0.0"),
-              "a" -> Conf.fromString("a1"),
-              "b" -> Conf.fromString("b3"),
-              "c" -> Conf.fromString("c1"),
-            )),
-            Conf.fromMap(Map(
-              "version" -> Conf.fromString("2.0.0"),
-              "a" -> Conf.fromString("a2"),
-              "b" -> Conf.fromString("b1"),
-              "c" -> Conf.fromString("c1"),
-            )),
-            Conf.fromMap(Map(
-              "version" -> Conf.fromString("2.0.0"),
-              "a" -> Conf.fromString("a2"),
-              "b" -> Conf.fromString("b2"),
-              "c" -> Conf.fromString("c1"),
-            )),
-            Conf.fromMap(Map(
-              "version" -> Conf.fromString("2.0.0"),
-              "a" -> Conf.fromString("a2"),
-              "b" -> Conf.fromString("b3"),
-              "c" -> Conf.fromString("c1"),
-            )),
+            Conf.fromMap(
+              Map(
+                "version" -> Conf.fromString("2.0.0"),
+                "a"       -> Conf.fromString("a1"),
+                "b"       -> Conf.fromString("b1"),
+                "c"       -> Conf.fromString("c1")
+              )
+            ),
+            Conf.fromMap(
+              Map(
+                "version" -> Conf.fromString("2.0.0"),
+                "a"       -> Conf.fromString("a1"),
+                "b"       -> Conf.fromString("b2"),
+                "c"       -> Conf.fromString("c1")
+              )
+            ),
+            Conf.fromMap(
+              Map(
+                "version" -> Conf.fromString("2.0.0"),
+                "a"       -> Conf.fromString("a1"),
+                "b"       -> Conf.fromString("b3"),
+                "c"       -> Conf.fromString("c1")
+              )
+            ),
+            Conf.fromMap(
+              Map(
+                "version" -> Conf.fromString("2.0.0"),
+                "a"       -> Conf.fromString("a2"),
+                "b"       -> Conf.fromString("b1"),
+                "c"       -> Conf.fromString("c1")
+              )
+            ),
+            Conf.fromMap(
+              Map(
+                "version" -> Conf.fromString("2.0.0"),
+                "a"       -> Conf.fromString("a2"),
+                "b"       -> Conf.fromString("b2"),
+                "c"       -> Conf.fromString("c1")
+              )
+            ),
+            Conf.fromMap(
+              Map(
+                "version" -> Conf.fromString("2.0.0"),
+                "a"       -> Conf.fromString("a2"),
+                "b"       -> Conf.fromString("b3"),
+                "c"       -> Conf.fromString("c1")
+              )
+            )
           )
       }
 
       it("should return the combinations of configs (for list of list)") {
-        val confA1 = Conf.fromList(List(
-          Conf.fromString("a1"),
-          Conf.fromString("a2"),
-          Conf.fromString("a3"),
-        ))
-        val confA2 = Conf.fromList(List(
-          Conf.fromString("a1"),
-          Conf.fromString("a2"),
-        ))
+        val confA1 = Conf.fromList(
+          List(
+            Conf.fromString("a1"),
+            Conf.fromString("a2"),
+            Conf.fromString("a3")
+          )
+        )
+        val confA2 = Conf.fromList(
+          List(
+            Conf.fromString("a1"),
+            Conf.fromString("a2")
+          )
+        )
 
-        val confB1 = Conf.fromMap(Map(
-          "b1" -> Conf.fromString("b1"),
-          "b2" -> Conf.fromString("b2"),
-        ))
-        val confB2 = Conf.fromMap(Map(
-          "b1" -> Conf.fromString("b3"),
-          "b2" -> Conf.fromString("b4"),
-        ))
+        val confB1 = Conf.fromMap(
+          Map(
+            "b1" -> Conf.fromString("b1"),
+            "b2" -> Conf.fromString("b2")
+          )
+        )
+        val confB2 = Conf.fromMap(
+          Map(
+            "b1" -> Conf.fromString("b3"),
+            "b2" -> Conf.fromString("b4")
+          )
+        )
 
-        val conf = Conf.fromMap(Map(
-          "a" -> Conf.fromList(List(
-            confA1,
-            confA2
-          )),
-          "b" -> Conf.fromList(List(
-            confB1,
-            confB2
-          )),
-        ))
+        val conf = Conf.fromMap(
+          Map(
+            "a" -> Conf.fromList(
+              List(
+                confA1,
+                confA2
+              )
+            ),
+            "b" -> Conf.fromList(
+              List(
+                confB1,
+                confB2
+              )
+            )
+          )
+        )
 
         conf.combination("2.0.0").right.get should contain theSameElementsAs
           Seq(
-            Conf.fromMap(Map(
-              "version" -> Conf.fromString("2.0.0"),
-              "a" -> confA1,
-              "b" -> confB1,
-            )),
-            Conf.fromMap(Map(
-              "version" -> Conf.fromString("2.0.0"),
-              "a" -> confA1,
-              "b" -> confB2,
-            )),
-            Conf.fromMap(Map(
-              "version" -> Conf.fromString("2.0.0"),
-              "a" -> confA2,
-              "b" -> confB1,
-            )),
-            Conf.fromMap(Map(
-              "version" -> Conf.fromString("2.0.0"),
-              "a" -> confA2,
-              "b" -> confB2,
-            )),
+            Conf.fromMap(
+              Map(
+                "version" -> Conf.fromString("2.0.0"),
+                "a"       -> confA1,
+                "b"       -> confB1
+              )
+            ),
+            Conf.fromMap(
+              Map(
+                "version" -> Conf.fromString("2.0.0"),
+                "a"       -> confA1,
+                "b"       -> confB2
+              )
+            ),
+            Conf.fromMap(
+              Map(
+                "version" -> Conf.fromString("2.0.0"),
+                "a"       -> confA2,
+                "b"       -> confB1
+              )
+            ),
+            Conf.fromMap(
+              Map(
+                "version" -> Conf.fromString("2.0.0"),
+                "a"       -> confA2,
+                "b"       -> confB2
+              )
+            )
           )
       }
 
       it("should override version (TODO: candidates should be unique)") {
-        val conf = Conf.fromMap(Map(
-          "a" -> Conf.fromList(List(
-            Conf.fromString("a1"),
-            Conf.fromString("a2"),
-          )),
-          "version" -> Conf.fromList(List(
-            Conf.fromString("xxx"),
-            Conf.fromString("yyy"),
-          )),
-        ))
+        val conf = Conf.fromMap(
+          Map(
+            "a" -> Conf.fromList(
+              List(
+                Conf.fromString("a1"),
+                Conf.fromString("a2")
+              )
+            ),
+            "version" -> Conf.fromList(
+              List(
+                Conf.fromString("xxx"),
+                Conf.fromString("yyy")
+              )
+            )
+          )
+        )
         conf.combination("2.0.0").right.get should contain theSameElementsAs
           Seq(
-            Conf.fromMap(Map(
-              "a" -> Conf.fromString("a1"),
-              "version" -> Conf.fromString("2.0.0"),
-            )),
-            Conf.fromMap(Map(
-              "a" -> Conf.fromString("a1"),
-              "version" -> Conf.fromString("2.0.0"),
-            )),
-            Conf.fromMap(Map(
-              "a" -> Conf.fromString("a2"),
-              "version" -> Conf.fromString("2.0.0"),
-            )),
-            Conf.fromMap(Map(
-              "a" -> Conf.fromString("a2"),
-              "version" -> Conf.fromString("2.0.0"),
-            )),
+            Conf.fromMap(
+              Map(
+                "a"       -> Conf.fromString("a1"),
+                "version" -> Conf.fromString("2.0.0")
+              )
+            ),
+            Conf.fromMap(
+              Map(
+                "a"       -> Conf.fromString("a1"),
+                "version" -> Conf.fromString("2.0.0")
+              )
+            ),
+            Conf.fromMap(
+              Map(
+                "a"       -> Conf.fromString("a2"),
+                "version" -> Conf.fromString("2.0.0")
+              )
+            ),
+            Conf.fromMap(
+              Map(
+                "a"       -> Conf.fromString("a2"),
+                "version" -> Conf.fromString("2.0.0")
+              )
+            )
           )
       }
     }

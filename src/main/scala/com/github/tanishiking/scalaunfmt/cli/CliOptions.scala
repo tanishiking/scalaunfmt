@@ -4,15 +4,15 @@ import java.io.File
 import java.nio.file.{Path, Paths}
 
 case class CliOptions(
-  config: Path = Paths.get(".scalaunfmt.conf"),
-  customFiles: Seq[File] = Nil,
-  version: String = "",
+    config: Path = Paths.get(".scalaunfmt.conf"),
+    customFiles: Seq[File] = Nil,
+    version: String = ""
 ) {
   def getFiles: Seq[File] = {
     customFiles.flatMap {
       case d if d.isDirectory => listFiles(d)
-      case f if f.isFile => Seq(f)
-      case _ => Seq.empty
+      case f if f.isFile      => Seq(f)
+      case _                  => Seq.empty
     }
   }
 
@@ -26,4 +26,3 @@ case class CliOptions(
     }
   }
 }
-

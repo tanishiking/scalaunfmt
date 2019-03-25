@@ -8,10 +8,10 @@ import org.scalatest.{FunSpec, Matchers}
 class ScalaunfmtReporterSpec extends FunSpec with Matchers {
   describe("ScalaunfmtReporter") {
     it("should not print error to PrintStream") {
-      val baos = new ByteArrayOutputStream()
+      val baos   = new ByteArrayOutputStream()
       val stream = new PrintStream(baos)
 
-      val message = "test message"
+      val message  = "test message"
       val reporter = new ScalaunfmtReporter(stream)
       reporter.error(Paths.get("/dummy"), message)
 
@@ -20,14 +20,14 @@ class ScalaunfmtReporterSpec extends FunSpec with Matchers {
 
     describe(".error") {
       it("should return None if error() was not called") {
-        val baos = new ByteArrayOutputStream()
-        val stream = new PrintStream(baos)
+        val baos     = new ByteArrayOutputStream()
+        val stream   = new PrintStream(baos)
         val reporter = new ScalaunfmtReporter(stream)
         reporter.error shouldBe None
       }
 
       it("should return all the messages") {
-        val baos = new ByteArrayOutputStream()
+        val baos   = new ByteArrayOutputStream()
         val stream = new PrintStream(baos)
 
         val message1 = "message1"

@@ -18,7 +18,7 @@ class CliSpec extends FunSpec with Matchers {
 
         val opt = CliOptions(
           config = configPath,
-          version = "2.0.0-RC5",
+          version = "2.0.0-RC5"
         )
         assertThrows[IllegalArgumentException] {
           Cli.run(opt, System.out, System.err)
@@ -35,7 +35,7 @@ class CliSpec extends FunSpec with Matchers {
 
         val opt = CliOptions(
           config = configPath,
-          version = "2.0.0-RC5",
+          version = "2.0.0-RC5"
         )
         assertThrows[IllegalArgumentException] {
           Cli.run(opt, System.out, System.err)
@@ -60,10 +60,10 @@ class CliSpec extends FunSpec with Matchers {
         val opt = CliOptions(
           config = configPath,
           customFiles = Seq(scalaFile.toFile),
-          version = "2.0.0-RC5",
+          version = "2.0.0-RC5"
         )
 
-        val baos = new ByteArrayOutputStream()
+        val baos   = new ByteArrayOutputStream()
         val stream = new PrintStream(baos)
 
         Cli.run(opt, stream, System.err)

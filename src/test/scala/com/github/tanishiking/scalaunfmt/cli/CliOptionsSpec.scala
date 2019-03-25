@@ -27,10 +27,10 @@ class CliOptionsSpec extends FunSpec with Matchers {
       }
 
       it("should return files in the specified directory") {
-        val dir = Files.createTempDirectory("dir")
+        val dir   = Files.createTempDirectory("dir")
         val temp1 = Files.createTempFile(dir, "dummy", ".conf")
         val temp2 = Files.createTempFile(dir, "dummy", ".conf")
-        val dir2 = Files.createTempDirectory(dir, "dir2")
+        val dir2  = Files.createTempDirectory(dir, "dir2")
         val temp3 = Files.createTempFile(dir2, "nested", ".conf")
         val temp4 = Files.createTempFile(dir2, "nested", ".conf")
 
@@ -45,7 +45,7 @@ class CliOptionsSpec extends FunSpec with Matchers {
           temp2.toFile,
           temp3.toFile,
           temp4.toFile,
-          temp.toFile,
+          temp.toFile
         )
       }
     }

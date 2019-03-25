@@ -4,7 +4,6 @@ import java.io.File
 
 import scopt.OptionParser
 
-
 object CliArgParser {
   val scoptParser: OptionParser[CliOptions] =
     new scopt.OptionParser[CliOptions]("scalaunfmt") {
