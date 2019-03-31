@@ -8,7 +8,6 @@ lazy val scalaunfmt = (project in file(".")).
   settings(
     name := "scalaunfmt",
     organization := "com.github.tanishiking",
-    version := "0.0.2",
     scalaVersion := "2.12.7",
 
     libraryDependencies ++= Seq(
@@ -31,33 +30,14 @@ lazy val scalaunfmt = (project in file(".")).
       "-opt-inline-from"
     ),
 
-    // Publishing
-    publishMavenStyle := true,
-    publishTo := Some(
-      if (isSnapshot.value)
-        Opts.resolver.sonatypeSnapshots
-      else
-        Opts.resolver.sonatypeStaging
-    ),
-    publishArtifact in Test := false,
-    pomIncludeRepository := { _ => false },
-    pomExtra := <url>https://github.com/tanishiking/scalaunfmt</url>
-      <licenses>
-        <license>
-          <name>MIT License</name>
-          <url>http://www.opensource.org/licenses/mit-license.php</url>
-          <distribution>repo</distribution>
-        </license>
-      </licenses>
-      <scm>
-        <url>git@github.com:tanishiking/scalaunfmt.git</url>
-        <connection>scm:git:git@github.com:tanishiking/scalaunfmt.git</connection>
-      </scm>
-      <developers>
-        <developer>
-          <id>tanishiking</id>
-          <name>Rikito Taniguchi</name>
-          <url>https://github.com/tanishiking</url>
-        </developer>
-      </developers>
+    homepage := Some(url("https://github.com/tanishiking/scalaunfmt")),
+    licenses := List("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")),
+    developers := List(
+      Developer(
+        "tanishiking",
+        "Rikito Taniguchi",
+        "rikiriki1238@gmail.com",
+        url("https://github.com/tanishiking")
+      )
+    )
   )

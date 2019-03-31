@@ -4,6 +4,8 @@ jdk:
 
 stages:
   - name: test
+  - name: release
+    if: (branch = master AND type = push) OR (tag IS present)
 
 jobs:
   include:
@@ -11,3 +13,8 @@ jobs:
       script: sbt scalafmtCheckAll
     - env: TEST="sbt test"
       script: sbt test
+    - stage: release
+      script: sbt ci-release
+
+before_install:
+  - git fetch --tags
