@@ -1,4 +1,6 @@
 # scalaunfmt
+[![Build Status](https://travis-ci.com/tanishiking/scalaunfmt.svg?branch=master)](https://travis-ci.com/tanishiking/scalaunfmt)
+
 scalaunfmt determines the most fit `.scalafmt.conf` with specified scala source codes.
 The `.scalafmt.conf` will be chosen from scalaunfmt configuration.
 
