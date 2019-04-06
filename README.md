@@ -1,92 +1,77 @@
 # scalaunfmt
 [![Build Status](https://travis-ci.com/tanishiking/scalaunfmt.svg?branch=master)](https://travis-ci.com/tanishiking/scalaunfmt)
 
-scalaunfmt determines the most fit `.scalafmt.conf` with specified scala source codes.
-The `.scalafmt.conf` will be chosen from scalaunfmt configuration.
-
-**Currently, scalaunfmt supports only scalafmt 1.6.0-RC4**
+scalaunfmt generates the `.scalafmt.conf` that have minimum change to existing scala codebase on running scalafmt.
+The candidate fields and values for resulting `.scalafmt.conf` can be controlled using configuration for scalaunfmt.
 
 ## How to install
 ```
-coursier bootstrap com.github.tanishiking:scalaunfmt_2.12:0.0.1 \
+coursier bootstrap com.github.tanishiking:scalaunfmt_2.12:0.0.3 \
   -r sonatype:releases \
   -o scalaunfmt --standalone --main com.github.tanishiking.scalaunfmt.cli.Cli
 ```
 
 ## Usage
-Configuration for scalaunfmt that describes configuration candidates for `.scalafmt.conf`, is defined in a plain text file using HOCON syntax.
-
-Here is an example:
-
-```
-maxColumn = [80, 100]
-align = [none, some, more, most]
-docstrings = [JavaDoc, ScalaDoc]
-verticalMultiline.newlineAfterImplicitKW = [true, false]
-```
-
-This scalaunfmt configuration means that scalaunfmt should choose `.scalafmt.conf` of which
-
-- `maxColumn` is either `80` or `100` and
-- `align` is `none` or `some` or `more` or `most` and
-- `docstrings` is `JavaDoc` or `ScalaDoc` and
-- `verticalMultiline.newlineAfterImplicitKW` is `true` or `false`
-
 ```
 Usage: scalaunfmt [options] [<file>...]
 
-  <file>...             file or directory, in which case all *.scala files are formatted.
-  --exclude <value>     file or directory, in which case all *.scala files are formatted.
-  --git                 if true, ignore files in .gitignore (default false)
-  -c, --config <value>  a file path to .scalaunfmt.conf
+  <file>...              file or directory, in which case all *.scala files are formatted.
+  -c, --config <value>   a file path to .scalaunfmt.conf (default: .scalaunfmt.conf).
+  -v, --version <value>  running version of scalafmt
+  -o, --output <value>   output file path (by default, scalaunfmt will write the result to stdout).
 ```
 
-## Configuration
-Here is a list of configurable scalafmt options using `conf = [foo, bar]` notation, like `maxColumn = [80, 100, 120]`
+We can use any versions of scalafmt using `-v` option (scalaunfmt will download the jar for specified version of scalafmt using scalafmt-dynamic).
 
-- `maxColumn List[Int]`
-- `align: List[Align]` (`Align` is `enum(none, some, more, most)`)
-- `docstrings: List[Docstrings]` (`Docstrings` is `enum(JavaDoc, ScalaDoc, preserve)`)
-- `optIn.configStyleArguments: List[Boolean]`
-- `optIn.breaksInsideChains: List[Boolean]`
-- `optIn.breakChainOnFirstMethodDot: List[Boolean]`
-- `optIn.selfAnnotationNewline: List[Boolean]`
-- `optIn.annotationNewlines: List[Boolean]`
-- `optIn.blankLineBeforeDocstring: List[Boolean]`
-- `binPack.parentConstructors: List[Boolean]`
-- `binPack.literalArgumentLists: List[Boolean]`
-- `binPack.literalsMinArgCount: List[Int]`
-- `continuationIndent.callSite: List[Int]`
-- `continuationIndent.defnSite: List[Int]`
-- `continuationIndent.extendSite: List[Int]`
-- `spaces.beforeContextBoundColon: List[SpaceBeforeContextBound]` (`SpaceBeforeContextBound` is `enum(Always, Never, IfMultipleBounds)`)
-- `spaces.afterTripleEquals: List[Boolean]`
-- `spaces.inImportCurlyBraces: List[Boolean]`
-- `spaces.inParentheses: List[Boolean]`
-- `spaces.afterKeywordBeforeParen: List[Boolean]`
-- `spaces.inByNameTypes: List[Boolean]`
-- `spaces.afterSymbolicDefs: List[Boolean]`
-- `literals.long: List[Case]` (`Case` is `enum(Upper, Lower, Unchanged)`)
-- `literals.float: List[Case]`
-- `literals.double: List[Case]`
-- `lineEndings: List[LineEndings]` (`LineEndings` is `enum(unix, windows, preserve)`)
-- `newlines.neverInResultType: List[Boolean]`
-- `newlines.neverBeforeJsNative: List[Boolean]`
-- `newlines.sometimesBeforeColonInMethodReturnType: List[Boolean]`
-- `newlines.penalizeSingleSelectMultiArgList: List[Boolean]`
-- `newlines.alwaysBeforeCurlyBraceLambdaParams: List[Boolean]`
-- `newlines.alwaysBeforeTopLevelStatements: List[Boolean]`
-- `newlines.afterCurlyLambda: List[NewlineCurlyLambda]` (`NewlineCurlyLambda` is `enum(preserve, always, never)`)
-- `newlines.alwaysBeforeElseAfterCurlyIf: List[Boolean]`
-- `newlines.alwaysBeforeMultilineDef: List[Boolean]`
-- `indentYieldKeyword: List[Boolean]`
-- `unindentTopLevelOperators: List[Boolean]`
-- `includeCurlyBraceInSelectChains: List[Boolean]`
-- `assumeStandardLibraryStripMargin: List[Boolean]`
-- `danglingParentheses: List[Boolean]`
-- `poorMansTrailingCommasInConfigStyle: List[Boolean]`
-- `verticalMultiline.atDefnSite: List[Boolean]`
-- `verticalMultiline.arityThreshold: List[Int]`
-- `verticalMultiline.newlineBeforeImplicitKW: List[Boolean]`
-- `verticalMultiline.newlineAfterImplicitKW: List[Boolean]`
-- `verticalMultiline.newlineAfterOpenParen: List[Boolean]`
+## Configuration
+The configuration for scalaunfmt looks like that for scalafmt, the difference is that the configuration for scalaunfmt requires the list of values on the right-hand side (instead of specific value).
+scalaunfmt will generate the multiple configurations for scalafmt using the combinations of rhs of scalaunfmt conf.
+
+For example,
+
+```
+maxColumn = [80, 100]
+align = [none, some]
+```
+
+scalaunfmt will generate the following list of scalafmt conf from the above one, and choose the best one that minimize the change to existing scala codebase.
+
+```
+maxColumn = 80
+align = none
+```
+
+```
+maxColumn = 80
+align = some
+```
+
+```
+maxColumn = 100
+align = none
+```
+
+```
+maxColumn = 100
+align = more
+```
+
+### More examples
+For the available list of fields and values for .scalafmt.conf, refer https://scalameta.org/scalafmt/docs/configuration.html
+
+```
+continuationIndent.callSite = [2, 4]
+continuationIndent.defnSite = [2, 4]
+```
+
+```
+rewrite.rules = [
+  [
+    AvoidInfix
+    RedundantBraces
+  ]
+  [
+    AvoidInfix
+  ]
+]
+```
