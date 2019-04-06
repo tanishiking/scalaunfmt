@@ -142,32 +142,56 @@ class RunnerSpec extends FunSpec with Matchers {
         val c2 = Conf.fromString("test")
         val c3 = Conf.fromInt(1)
         Seq(c1, c2, c3).foreach { conf =>
-          conf.combination("2.0.0").isLeft shouldBe true
+          conf.combination.isLeft shouldBe true
         }
       }
 
-      it("should return error for config that contains non-list value") {
-        val c = Conf.fromMap(
-          Map(
-            "a" -> Conf.fromList(
-              List(
-                Conf.fromInt(1),
-                Conf.fromInt(2)
-              )
-            ),
-            "b" -> Conf.fromList(
-              List(
-                Conf.fromString("xxx"),
-                Conf.fromString("yyy")
-              )
-            ),
-            "c" -> Conf.fromString("non-list")
-          )
-        )
-        c.combination("2.0.0").isLeft shouldBe true
+      it("should return error for config that contains non-list/map value") {
+        {
+          val str =
+            """
+              |a = [1, 2]
+              |b = ["xxx", "yyy"]
+              |c = "non-list"
+            """.stripMargin
+          Conf.parseString(str).get.combination.isLeft shouldBe true
+        }
+        {
+          val str =
+            """
+              |conf = ["x", "y"]
+              |a.b = "non list"
+            """.stripMargin
+          Conf.parseString(str).get.combination.isLeft shouldBe true
+        }
       }
 
       it("should return error if conf contains empty list") {
+        {
+          val c = Conf.fromMap(
+            Map(
+              "a" -> Conf.fromList(
+                List(
+                  Conf.fromInt(1),
+                  Conf.fromInt(2)
+                )
+              ),
+              "b" -> Conf.fromList(List())
+            )
+          )
+          c.combination.isLeft shouldBe true
+        }
+        {
+          val str =
+            """
+            |conf = ["x", "y"]
+            |a.b = []
+            """.stripMargin
+          Conf.parseString(str).get.combination.isLeft shouldBe true
+        }
+      }
+
+      it("should return error if conf contains empty obj") {
         val c = Conf.fromMap(
           Map(
             "a" -> Conf.fromList(
@@ -176,10 +200,10 @@ class RunnerSpec extends FunSpec with Matchers {
                 Conf.fromInt(2)
               )
             ),
-            "b" -> Conf.fromList(List())
+            "b" -> Conf.fromMap(Map())
           )
         )
-        c.combination("2.0.0").isLeft shouldBe true
+        c.combination.isLeft shouldBe true
       }
 
       it("should return all the combinations of configurations") {
@@ -205,54 +229,48 @@ class RunnerSpec extends FunSpec with Matchers {
             )
           )
         )
-        conf.combination("2.0.0").right.get should contain theSameElementsAs
+        conf.combination.right.get should contain theSameElementsAs
           Seq(
             Conf.fromMap(
               Map(
-                "version" -> Conf.fromString("2.0.0"),
-                "a"       -> Conf.fromString("a1"),
-                "b"       -> Conf.fromString("b1"),
-                "c"       -> Conf.fromString("c1")
+                "a" -> Conf.fromString("a1"),
+                "b" -> Conf.fromString("b1"),
+                "c" -> Conf.fromString("c1")
               )
             ),
             Conf.fromMap(
               Map(
-                "version" -> Conf.fromString("2.0.0"),
-                "a"       -> Conf.fromString("a1"),
-                "b"       -> Conf.fromString("b2"),
-                "c"       -> Conf.fromString("c1")
+                "a" -> Conf.fromString("a1"),
+                "b" -> Conf.fromString("b2"),
+                "c" -> Conf.fromString("c1")
               )
             ),
             Conf.fromMap(
               Map(
-                "version" -> Conf.fromString("2.0.0"),
-                "a"       -> Conf.fromString("a1"),
-                "b"       -> Conf.fromString("b3"),
-                "c"       -> Conf.fromString("c1")
+                "a" -> Conf.fromString("a1"),
+                "b" -> Conf.fromString("b3"),
+                "c" -> Conf.fromString("c1")
               )
             ),
             Conf.fromMap(
               Map(
-                "version" -> Conf.fromString("2.0.0"),
-                "a"       -> Conf.fromString("a2"),
-                "b"       -> Conf.fromString("b1"),
-                "c"       -> Conf.fromString("c1")
+                "a" -> Conf.fromString("a2"),
+                "b" -> Conf.fromString("b1"),
+                "c" -> Conf.fromString("c1")
               )
             ),
             Conf.fromMap(
               Map(
-                "version" -> Conf.fromString("2.0.0"),
-                "a"       -> Conf.fromString("a2"),
-                "b"       -> Conf.fromString("b2"),
-                "c"       -> Conf.fromString("c1")
+                "a" -> Conf.fromString("a2"),
+                "b" -> Conf.fromString("b2"),
+                "c" -> Conf.fromString("c1")
               )
             ),
             Conf.fromMap(
               Map(
-                "version" -> Conf.fromString("2.0.0"),
-                "a"       -> Conf.fromString("a2"),
-                "b"       -> Conf.fromString("b3"),
-                "c"       -> Conf.fromString("c1")
+                "a" -> Conf.fromString("a2"),
+                "b" -> Conf.fromString("b3"),
+                "c" -> Conf.fromString("c1")
               )
             )
           )
@@ -303,83 +321,68 @@ class RunnerSpec extends FunSpec with Matchers {
           )
         )
 
-        conf.combination("2.0.0").right.get should contain theSameElementsAs
+        conf.combination.right.get should contain theSameElementsAs
           Seq(
             Conf.fromMap(
               Map(
-                "version" -> Conf.fromString("2.0.0"),
-                "a"       -> confA1,
-                "b"       -> confB1
+                "a" -> confA1,
+                "b" -> confB1
               )
             ),
             Conf.fromMap(
               Map(
-                "version" -> Conf.fromString("2.0.0"),
-                "a"       -> confA1,
-                "b"       -> confB2
+                "a" -> confA1,
+                "b" -> confB2
               )
             ),
             Conf.fromMap(
               Map(
-                "version" -> Conf.fromString("2.0.0"),
-                "a"       -> confA2,
-                "b"       -> confB1
+                "a" -> confA2,
+                "b" -> confB1
               )
             ),
             Conf.fromMap(
               Map(
-                "version" -> Conf.fromString("2.0.0"),
-                "a"       -> confA2,
-                "b"       -> confB2
+                "a" -> confA2,
+                "b" -> confB2
               )
             )
           )
       }
 
-      it("should override version (TODO: candidates should be unique)") {
-        val conf = Conf.fromMap(
-          Map(
-            "a" -> Conf.fromList(
-              List(
-                Conf.fromString("a1"),
-                Conf.fromString("a2")
-              )
-            ),
-            "version" -> Conf.fromList(
-              List(
-                Conf.fromString("xxx"),
-                Conf.fromString("yyy")
-              )
-            )
-          )
-        )
-        conf.combination("2.0.0").right.get should contain theSameElementsAs
-          Seq(
-            Conf.fromMap(
-              Map(
-                "a"       -> Conf.fromString("a1"),
-                "version" -> Conf.fromString("2.0.0")
-              )
-            ),
-            Conf.fromMap(
-              Map(
-                "a"       -> Conf.fromString("a1"),
-                "version" -> Conf.fromString("2.0.0")
-              )
-            ),
-            Conf.fromMap(
-              Map(
-                "a"       -> Conf.fromString("a2"),
-                "version" -> Conf.fromString("2.0.0")
-              )
-            ),
-            Conf.fromMap(
-              Map(
-                "a"       -> Conf.fromString("a2"),
-                "version" -> Conf.fromString("2.0.0")
-              )
-            )
-          )
+      it("should return the combinations of configs (for nested obj)") {
+        val scalaunfmtConfStr =
+          """
+          |a.b = ["x", "y"]
+          |a.c.d = ["y", "z"]
+          """.stripMargin
+
+        val c1 =
+          """
+          |a.b = "x"
+          |a.c.d = "y"
+          """.stripMargin
+        val c2 =
+          """
+            |a.b = "x"
+            |a.c.d = "z"
+          """.stripMargin
+        val c3 =
+          """
+            |a.b = "y"
+            |a.c.d = "y"
+          """.stripMargin
+        val c4 =
+          """
+            |a.b = "y"
+            |a.c.d = "z"
+          """.stripMargin
+
+        val expected = Seq(c1, c2, c3, c4).map(Conf.parseString(_).get)
+
+        val scalaunfmtConf = Conf.parseString(scalaunfmtConfStr).get
+        scalaunfmtConf.combination.right.get should contain theSameElementsAs expected
+
       }
     }
   }

@@ -18,9 +18,11 @@ class Runner(err: PrintStream) {
     val levenshtein = new Levenshtein()
     val reporter    = new ScalaunfmtReporter(System.err)
 
+    val patch = Conf.fromMap(Map("version" -> Conf.Str(version)))
     for {
-      candidates <- scalaunfmtConf.combination(version)
-      candidateFiles = candidates.map(_.writeToTempFile(".scalaunfmt", ".conf"))
+      candidates <- scalaunfmtConf.combination
+      cs             = candidates.map(c => Conf.applyPatch(c, patch))
+      candidateFiles = cs.map(_.writeToTempFile(".scalaunfmt", ".conf"))
       validConfigs <- validateConfigs(candidateFiles)
     } yield {
       val numCandidates = candidates.length
@@ -77,7 +79,7 @@ object Runner {
       temp
     }
 
-    def combination(version: String): Either[Throwable, Seq[Conf]] = {
+    def combination: Either[Throwable, Seq[Conf]] = {
       for {
         ls <- conf match {
           case Conf.Obj(value) => Right(value)
@@ -86,24 +88,27 @@ object Runner {
               new IllegalArgumentException(s"Invalid configuration, it must be obj: ${conf.show}")
             )
         }
-        isValid = ls.forall {
-          case (_, Conf.Lst(lst)) if lst.nonEmpty => true
-          case _                                  => false
-        }
-        ls <- if (isValid) Right(ls)
-        else
-          Left(
-            new IllegalArgumentException(
-              s"Invalid configuration, its all values must be List: ${conf.show}"
-            )
-          )
+        kvss <- ls
+          .map {
+            case (k, Conf.Lst(cs)) if cs.nonEmpty => Right((k, cs))
+            case (k, v @ Conf.Obj(vs)) if vs.nonEmpty =>
+              v.combination match {
+                case Right(cs) => Right((k, cs.toList))
+                case Left(e)   => Left(e)
+              }
+            case _ =>
+              Left(
+                new IllegalArgumentException(
+                  s"Invalid configuration, its all values must be List: ${conf.show}"
+                )
+              )
+          }
+          .foldRight(Right(Nil): Either[Throwable, List[(String, List[Conf])]]) { (elem, acc) =>
+            acc.flatMap(ls => elem.map(_ :: ls))
+          }
       } yield {
-        val kvss = ls.flatMap {
-          case (k, Conf.Lst(cs)) => Some((k, cs))
-          case _                 => None
-        }
         combinations(kvss).map { candidate =>
-          Conf.fromMap(candidate.toMap.updated("version", Conf.fromString(version)))
+          Conf.fromMap(candidate.toMap)
         }
       }
     }
