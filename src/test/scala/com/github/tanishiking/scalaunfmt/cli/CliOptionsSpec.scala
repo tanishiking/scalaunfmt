@@ -49,5 +49,19 @@ class CliOptionsSpec extends FunSpec with Matchers {
         )
       }
     }
+
+    describe("getPrintStream") {
+      it("should return PrintStream to specified file.") {
+        val temp = Files.createTempFile("dummy", ".conf")
+        val opt = CliOptions(
+          version = "2.0.0-RC5",
+          output = Some(temp)
+        )
+        opt.getPrintStream.println("test")
+
+        val content = new String(Files.readAllBytes(temp))
+        content.contains("test") shouldBe true
+      }
+    }
   }
 }

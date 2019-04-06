@@ -9,7 +9,7 @@ class CliArgParserSpec extends FunSpec with Matchers {
     describe("scoptParser") {
       it("should return None if required field was not specified") {
         val parsed =
-          CliArgParser.scoptParser.parse(Array("-v", "2.0.0-RC5", "dummy.scala"), CliOptions())
+          CliArgParser.scoptParser.parse(Array("dummy.scala"), CliOptions())
         parsed.isEmpty shouldBe true
       }
 

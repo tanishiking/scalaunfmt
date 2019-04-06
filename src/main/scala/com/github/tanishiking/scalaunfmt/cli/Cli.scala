@@ -11,7 +11,7 @@ object Cli {
     CliArgParser.scoptParser.parse(args, CliOptions()) match {
       case None => sys.exit(1)
       case Some(cliOpt) =>
-        val code = run(cliOpt, System.out, System.err)
+        val code = run(cliOpt, cliOpt.getPrintStream, System.err)
         sys.exit(code)
     }
   }
