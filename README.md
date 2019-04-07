@@ -1,6 +1,7 @@
 # scalaunfmt
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f08c70f5d5c64cd882904f2be45256dd)](https://app.codacy.com/app/tanishiking/scalaunfmt?utm_source=github.com&utm_medium=referral&utm_content=tanishiking/scalaunfmt&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.com/tanishiking/scalaunfmt.svg?branch=master)](https://travis-ci.com/tanishiking/scalaunfmt)
+[![Latest version](https://index.scala-lang.org/tanishiking/scalaunfmt/scalaunfmt/latest.svg)](https://index.scala-lang.org/tanishiking/scalaunfmt/scalaunfmt)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f08c70f5d5c64cd882904f2be45256dd)](https://app.codacy.com/app/tanishiking/scalaunfmt?utm_source=github.com&utm_medium=referral&utm_content=tanishiking/scalaunfmt&utm_campaign=Badge_Grade_Dashboard)
 
 scalaunfmt generates the `.scalafmt.conf` that have minimum change to existing scala codebase on running scalafmt.
 The candidate fields and values for resulting `.scalafmt.conf` can be controlled using configuration for scalaunfmt.
