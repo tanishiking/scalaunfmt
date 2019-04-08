@@ -2,7 +2,7 @@ val scalafmtV = "2.0.0-RC6"
 val metaconfigV = "0.8.4"
 val scalatestV = "3.0.5"
 val scoptV = "3.7.1"
-val similarityV = "1.0.1"
+val similarityV = "1.1.0"
 
 lazy val scalaunfmt = (project in file(".")).
   settings(
