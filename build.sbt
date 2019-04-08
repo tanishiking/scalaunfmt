@@ -18,7 +18,7 @@ lazy val scalaunfmt = (project in file(".")).
       "org.scalatest" %% "scalatest" % scalatestV % "test",
       "info.debatty" % "java-string-similarity" % similarityV,
       // undeclared transitive dependency of coursier-small
-      "org.scala-lang.modules" %% "scala-xml" % "1.1.1"
+      "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
     ),
 
     // Compilation
