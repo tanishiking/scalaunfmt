@@ -30,10 +30,12 @@ object Cli {
     } match {
       case Success(v) => v
       case Failure(e: NoSuchFileException) =>
-        throw new IllegalArgumentException(
+        val exception = new IllegalArgumentException(
           s"""Configuration file ${e.getFile} not found.
-             |Provide the file in reference to https://github.com/tanishiking/scalaunfmt#configuration""".stripMargin
+Provide the file in reference to https://github.com/tanishiking/scalaunfmt#configuration""".stripMargin
         )
+        exception.setStackTrace(Array.empty)
+        throw exception
       case Failure(e) => throw e // unknown
     }
 

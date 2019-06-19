@@ -18,6 +18,7 @@ class CliSpec extends FunSpec with Matchers {
           Cli.run(opt, System.out, System.err)
         }
         assert(ex.getMessage.contains("Configuration file NO.SUCH.FILE.conf not found."))
+        assert(ex.getStackTrace.isEmpty)
       }
 
       it("should throw exception for unparsable config") {
