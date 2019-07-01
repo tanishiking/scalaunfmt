@@ -1,10 +1,13 @@
 package com.github.tanishiking.scalaunfmt.cli
 
 import java.io.PrintStream
+import java.nio.file.NoSuchFileException
 
 import com.github.tanishiking.scalaunfmt.core.Runner
 import metaconfig.{Conf, Configured}
 import metaconfig.typesafeconfig._
+
+import scala.util.{Failure, Success, Try}
 
 object Cli {
   def main(args: Array[String]): Unit = {
@@ -22,7 +25,21 @@ object Cli {
 
     val runner = new Runner(errStream)
 
-    Conf.parseFile(confPath.toFile) match {
+    val conf = Try {
+      Conf.parseFile(confPath.toFile)
+    } match {
+      case Success(v) => v
+      case Failure(e: NoSuchFileException) =>
+        val exception = new IllegalArgumentException(
+          s"""Configuration file ${e.getFile} not found.
+Provide the file in reference to https://github.com/tanishiking/scalaunfmt#configuration""".stripMargin
+        )
+        exception.setStackTrace(Array.empty)
+        throw exception
+      case Failure(e) => throw e // unknown
+    }
+
+    conf match {
       case Configured.Ok(value) =>
         runner.run(
           files,

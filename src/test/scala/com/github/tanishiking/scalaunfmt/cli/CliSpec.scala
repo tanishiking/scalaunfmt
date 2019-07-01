@@ -1,13 +1,26 @@
 package com.github.tanishiking.scalaunfmt.cli
 
 import java.io.{ByteArrayOutputStream, PrintStream}
-import java.nio.file.Files
+import java.nio.file.{Files, NoSuchFileException, Paths}
 
 import org.scalatest.{FunSpec, Matchers}
 
 class CliSpec extends FunSpec with Matchers {
   describe("Cli") {
     describe("run") {
+      it("should show error message to guide users to create a config file") {
+        val configPath = Paths.get("NO.SUCH.FILE.conf")
+        val opt = CliOptions(
+          config = configPath,
+          version = "2.0.0-RC5"
+        )
+        val ex = intercept[IllegalArgumentException] {
+          Cli.run(opt, System.out, System.err)
+        }
+        assert(ex.getMessage.contains("Configuration file NO.SUCH.FILE.conf not found."))
+        assert(ex.getStackTrace.isEmpty)
+      }
+
       it("should throw exception for unparsable config") {
         val configPath = Files.createTempFile("temp", ".conf")
         val unparsableConf =
