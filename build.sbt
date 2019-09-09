@@ -1,5 +1,5 @@
 val scalafmtV = "2.0.0"
-val metaconfigV = "0.9.3"
+val metaconfigV = "0.9.4"
 val scalatestV = "3.0.7"
 val scoptV = "3.7.1"
 val similarityV = "1.2.1"
