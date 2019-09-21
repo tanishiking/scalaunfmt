@@ -10,7 +10,7 @@ The candidate fields and values for resulting `.scalafmt.conf` can be controlled
 
 ## How to install
 ```
-coursier bootstrap com.github.tanishiking:scalaunfmt_2.12:0.0.3 \
+coursier bootstrap com.github.tanishiking:scalaunfmt_2.12:0.0.5 \
   -r sonatype:releases \
   -o scalaunfmt --standalone --main com.github.tanishiking.scalaunfmt.cli.Cli
 ```
