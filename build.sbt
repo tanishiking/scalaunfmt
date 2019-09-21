@@ -5,6 +5,7 @@ val scoptV = "3.7.1"
 val similarityV = "1.2.1"
 
 lazy val scalaunfmt = (project in file(".")).
+  enablePlugins(BuildInfoPlugin).
   settings(
     name := "scalaunfmt",
     organization := "com.github.tanishiking",
@@ -29,6 +30,9 @@ lazy val scalaunfmt = (project in file(".")).
       "-opt:l:inline",
       "-opt-inline-from"
     ),
+
+    buildInfoKeys := Seq[BuildInfoKey](version),
+    buildInfoPackage := "com.github.tanishiking.scalaunfmt",
 
     homepage := Some(url("https://github.com/tanishiking/scalaunfmt")),
     licenses := List("MIT License" -> url("http://www.opensource.org/licenses/mit-license.php")),

@@ -1,4 +1,5 @@
-package com.github.tanishiking.scalaunfmt.cli
+package com.github.tanishiking.scalaunfmt
+package cli
 
 import java.io.File
 
@@ -8,7 +9,7 @@ object CliArgParser {
   val scoptParser: OptionParser[CliOptions] =
     new scopt.OptionParser[CliOptions]("scalaunfmt") {
 
-      head("scalaunfmt", "0.0.3")
+      head("scalaunfmt", BuildInfo.version)
       arg[File]("<file>...")
         .optional()
         .unbounded()
