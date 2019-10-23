@@ -1,6 +1,7 @@
 package com.github.tanishiking.scalaunfmt.core
 
 import java.io.{PrintStream, PrintWriter}
+import java.io.OutputStreamWriter
 import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.UnaryOperator
@@ -33,4 +34,7 @@ class ScalaunfmtReporter(out: PrintStream) extends ScalafmtReporter {
   override def parsedConfig(config: Path, scalafmtVersion: String): Unit = {}
 
   override def downloadWriter(): PrintWriter = new PrintWriter(out)
+
+  override def downloadOutputStreamWriter(): OutputStreamWriter =
+    new OutputStreamWriter(out)
 }
