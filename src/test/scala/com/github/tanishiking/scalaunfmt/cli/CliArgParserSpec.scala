@@ -2,9 +2,10 @@ package com.github.tanishiking.scalaunfmt.cli
 
 import java.nio.file.Paths
 
-import org.scalatest.{FunSpec, Matchers}
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 
-class CliArgParserSpec extends FunSpec with Matchers {
+class CliArgParserSpec extends AnyFunSpec with Matchers {
   describe("CliArgParser") {
     describe("scoptParser") {
       it("should return None if required field was not specified") {
