@@ -9,10 +9,6 @@ stages:
 
 jobs:
   include:
-    - env: TEST="scalafmt"
-      script: sbt scalafmtCheckAll
-    - env: TEST="sbt test"
-      script: sbt test
     - stage: release
       script: sbt ci-release
 
