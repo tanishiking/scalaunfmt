@@ -1,0 +1,27 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  unit:
+    name: ${{ matrix.os }} tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: olafurpg/setup-scala@v7
+      - name: Run unit tests
+        run: sbt +test
+  checks:
+    name: Run Scalafmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: olafurpg/setup-scala@v7
+      - name: Run Scalafmt
+        run: sbt scalafmtCheckAll
