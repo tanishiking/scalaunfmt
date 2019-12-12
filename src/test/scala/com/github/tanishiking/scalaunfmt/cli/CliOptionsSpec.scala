@@ -2,9 +2,10 @@ package com.github.tanishiking.scalaunfmt.cli
 
 import java.nio.file.{Files, Paths}
 
-import org.scalatest.{FunSpec, Matchers}
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 
-class CliOptionsSpec extends FunSpec with Matchers {
+class CliOptionsSpec extends AnyFunSpec with Matchers {
   describe("CliOptions") {
     describe("getFiles") {
       it("should return empty for non-exist files") {

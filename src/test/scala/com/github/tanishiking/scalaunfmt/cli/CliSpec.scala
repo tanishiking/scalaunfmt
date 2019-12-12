@@ -3,9 +3,10 @@ package com.github.tanishiking.scalaunfmt.cli
 import java.io.{ByteArrayOutputStream, PrintStream}
 import java.nio.file.{Files, NoSuchFileException, Paths}
 
-import org.scalatest.{FunSpec, Matchers}
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 
-class CliSpec extends FunSpec with Matchers {
+class CliSpec extends AnyFunSpec with Matchers {
   describe("Cli") {
     describe("run") {
       it("should show error message to guide users to create a config file") {

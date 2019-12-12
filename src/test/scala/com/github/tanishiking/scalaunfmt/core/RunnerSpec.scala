@@ -4,10 +4,11 @@ import java.io.{ByteArrayOutputStream, PrintStream}
 import java.nio.file.Files
 
 import metaconfig.Conf
-import org.scalatest.{FunSpec, Matchers}
 import metaconfig.typesafeconfig._
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 
-class RunnerSpec extends FunSpec with Matchers {
+class RunnerSpec extends AnyFunSpec with Matchers {
   describe("Runner") {
     describe("run") {
       it("should select the most match scalafmt.conf") {

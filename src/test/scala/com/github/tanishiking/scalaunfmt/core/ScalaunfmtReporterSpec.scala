@@ -3,9 +3,10 @@ package com.github.tanishiking.scalaunfmt.core
 import java.io.{ByteArrayOutputStream, PrintStream}
 import java.nio.file.Paths
 
-import org.scalatest.{FunSpec, Matchers}
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 
-class ScalaunfmtReporterSpec extends FunSpec with Matchers {
+class ScalaunfmtReporterSpec extends AnyFunSpec with Matchers {
   describe("ScalaunfmtReporter") {
     it("should not print error to PrintStream") {
       val baos   = new ByteArrayOutputStream()
