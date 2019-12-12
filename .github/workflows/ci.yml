@@ -6,13 +6,13 @@ on:
   pull_request:
 jobs:
   unit:
-    name: ${{ matrix.os }} tests
+    name: Test ${{ matrix.java }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
-        java: [ 'openjdk@1.8', 'openjdk@1.11' ]
+        java: [ 'adopt@1.8', 'openjdk@1.11' ]
     steps:
       - uses: actions/checkout@v1
       - uses: olafurpg/setup-scala@v7
