@@ -6,15 +6,18 @@ on:
   pull_request:
 jobs:
   unit:
-    name: ${{ matrix.os }} tests
+    name: Test ${{ matrix.java }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
+        java: [ '1.8', '1.11' ]
     steps:
       - uses: actions/checkout@v1
       - uses: olafurpg/setup-scala@v7
+        with:
+          java-version: ${{ matrix.java }}
       - name: Run unit tests
         run: sbt +test
   checks:
