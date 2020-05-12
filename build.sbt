@@ -2,7 +2,7 @@ val scalafmtV = "2.3.2"
 val metaconfigV = "0.9.4"
 val scalatestV = "3.1.0"
 val scoptV = "3.7.1"
-val similarityV = "1.2.1"
+val similarityV = "2.0.0"
 
 lazy val scalaunfmt = (project in file(".")).
   enablePlugins(BuildInfoPlugin).
