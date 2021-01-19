@@ -20,6 +20,7 @@ jobs:
           java-version: ${{ matrix.java }}
       - name: Run unit tests
         run: sbt +test
+        shell: bash
   checks:
     name: Run Scalafmt
     runs-on: ubuntu-latest
