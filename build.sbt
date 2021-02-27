@@ -9,7 +9,7 @@ lazy val scalaunfmt = (project in file(".")).
   settings(
     name := "scalaunfmt",
     organization := "com.github.tanishiking",
-    scalaVersion := "2.12.7",
+    scalaVersion := "2.12.13",
 
     libraryDependencies ++= Seq(
       "org.scalameta" %% "scalafmt-dynamic" % scalafmtV,
